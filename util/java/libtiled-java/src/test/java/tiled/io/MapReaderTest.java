@@ -128,6 +128,25 @@ public class MapReaderTest {
     }
 
     @Test
+    public void testReadingEmbeddedImageCollectionMap() throws Exception {
+        // Arrange
+        File mapFile = getFileFromResources("resources/embedded_image_collection.tmx");
+
+        // Act
+        Map map = new TMXMapReader().readMap(mapFile.getAbsolutePath());
+
+        // Assert
+        assertEquals(Map.Orientation.ORTHOGONAL, map.getOrientation());
+        assertEquals(3, map.getWidth());
+        assertEquals(1, map.getHeight());
+        assertEquals(32, map.getTileWidth());
+        assertEquals(32, map.getTileHeight());
+        assertEquals(1, map.getLayerCount());
+        assertNotNull(((TileLayer) map.getLayer(0)).getTileAt(0, 0));
+        assertNotNull(((TileLayer) map.getLayer(0)).getTileAt(2, 0));
+    }
+
+    @Test
     public void testReadingExampleOutsideMap() throws Exception {
         // Arrange
         File mapFile = getFileFromResources("resources/orthogonal-outside.tmx");

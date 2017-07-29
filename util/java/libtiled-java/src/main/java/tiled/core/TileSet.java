@@ -37,9 +37,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -66,7 +65,7 @@ import tiled.util.BasicTileCutter;
 public class TileSet implements Iterable<Tile> {
 
     private String base;
-    final private List<Tile> tiles = new ArrayList<>();
+    final private java.util.Map<Integer, Tile> tiles = new HashMap<>();
     private long tilebmpFileLastModified;
     private TileCutter tileCutter;
     private Rectangle tileDimensions;
@@ -297,7 +296,7 @@ public class TileSet implements Iterable<Tile> {
             tileDimensions.height = t.getHeight();
         }
 
-        tiles.add(t);
+        tiles.put(t.getId(), t);
         t.setTileSet(this);
 
         return t.getId();
@@ -317,13 +316,11 @@ public class TileSet implements Iterable<Tile> {
 
     /**
      * Removes a tile from this tileset. Does not invalidate other tile indices.
-     * Removal is simply setting the reference at the specified index to
-     * <b>null</b>.
      *
      * @param i the index to remove
      */
     public void removeTile(int i) {
-        tiles.set(i, null);
+        tiles.remove(i);
     }
 
     /**
@@ -352,7 +349,7 @@ public class TileSet implements Iterable<Tile> {
      */
     @Override
     public Iterator<Tile> iterator() {
-        return tiles.iterator();
+        return tiles.values().iterator();
     }
 
     /**
